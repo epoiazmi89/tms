@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Training Management System</title>
+<style>
+  :root{--bg:#0b1222;--card:#0f172a;--line:#1f2937;--text:#e5e7eb;--muted:#94a3b8;--acc:#22d3ee}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:linear-gradient(120deg,#0b1222,#0a1327 55%,#0b1222);font-family:system-ui,Segoe UI,Roboto,Arial;color:var(--text)}
+  .wrap{width:min(720px,92vw);padding:28px;border-radius:18px;background:rgba(15,23,42,.75);backdrop-filter:blur(6px);border:1px solid var(--line)}
+  h1{margin:0 0 8px 0;font-size:22px}
+  p{margin:0;color:var(--muted)}
+  .row{margin-top:18px;display:grid;grid-template-columns:1fr;gap:10px}
+  .btn{display:block;width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:#0b1222;color:var(--text);font-weight:700;cursor:pointer;text-align:center}
+  .btn.primary{background:linear-gradient(180deg,#22d3ee,#0ea5b7);color:#001018;border-color:#0ea5b7}
+  .small{font-size:12px;color:var(--muted)}
+  .card{padding:14px;border:1px dashed #1f2937;border-radius:12px;margin-top:8px}
+  input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0b1222;color:var(--text)}
+  code{padding:6px 8px;border-radius:10px;background:#0b1222;border:1px solid var(--line)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Training Management System</h1>
+    <p class="small">GitHub Pages • Google Sheets backend • Simple launcher</p>
+
+    <div class="row">
+      <a class="btn" href="admin.html">Admin Login</a>
+    </div>
+
+    <div class="row">
+      <label>Enter Session ID for Participant Check‑In</label>
+      <input id="sess" placeholder="e.g. CLS-002" />
+      <button class="btn primary" onclick="openCheckIn()">Open Participant Check‑In</button>
+      <div id="linkbox" class="card small" hidden>
+        Link: <code id="plink"></code>
+      </div>
+    </div>
+
+    <div class="row">
+      <p class="small">Tip: Share the link above as a QR using any free QR generator. Attendance requires participants to pick their name and mark Present. Walk‑ins require admin password.</p>
+    </div>
+  </div>
+
+<script>
+  // If someone visits /?session=CLS-XXX, redirect straight to participant page
+  const params = new URLSearchParams(location.search);
+  const qsSession = params.get('session');
+  if(qsSession){ location.replace('participant.html?session='+encodeURIComponent(qsSession)); }
+
+  function openCheckIn(){
+    const s = (document.getElementById('sess').value||'').trim();
+    if(!s){ alert('Please enter a Session ID (e.g. CLS-002)'); return; }
+    const url = 'participant.html?session=' + encodeURIComponent(s);
+    // show link and also open in a new tab
+    document.getElementById('plink').textContent = location.origin + location.pathname.replace(/[^\/]*$/, '') + url;
+    document.getElementById('linkbox').hidden = false;
+    window.open(url, '_blank');
+  }
+</script>
+</body>
+</html>
